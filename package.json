@@ -1,5 +1,5 @@
 {
-  "name": "nodejs-online-store",
+  "name": "nodejs-ecommerce",
   "version": "1.0.0",
   "description": "An online store built in NodeJS",
   "main": "server.js",
