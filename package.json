@@ -2,10 +2,10 @@
   "name": "nodejs-online-store",
   "version": "1.0.0",
   "description": "An online store built in NodeJS",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
-    "dev": "nodemon index.js",
-    "start": "node index.js",
+    "dev": "nodemon server.js",
+    "start": "node server.js",
     "lint": "eslint"
   },
   "keywords": [
@@ -23,5 +23,8 @@
     "eslint-plugin-prettier": "^4.0.0",
     "nodemon": "^2.0.15",
     "prettier": "^2.5.1"
+  },
+  "dependencies": {
+    "express": "^4.17.1"
   }
 }
