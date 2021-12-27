@@ -1,4 +1,5 @@
 const faker = require('faker');
+const boom = require('@hapi/boom');
 
 class ProductsService {
   constructor() {
@@ -13,31 +14,31 @@ class ProductsService {
         productName: faker.commerce.productName(),
         productDescription: faker.commerce.productDescription(),
         price: faker.commerce.price(),
+        isBlocked: faker.datatype.boolean(),
       });
     }
   }
 
   async find(query) {
     if (query.id) {
-      return this.products.find((product) => product.id === query.id);
+      let product = this.products.find((product) => product.id === query.id);
+      if (!product) {
+        throw boom.notFound('Product not found');
+      }
+      if (product.isBlocked) {
+        throw boom.unauthorized('The product is blocked');
+      }
+      return product;
     }
     return this.products;
   }
 
   async create({ productName, productDescription, price }) {
     if (!productName) {
-      throw {
-        message: 'The product name is necessary.',
-        status: 404,
-        internal: null,
-      };
+      throw boom.badRequest('Product name cannot be empty.');
     }
     if (!price) {
-      throw {
-        message: 'The price is necessary.',
-        status: 404,
-        internal: null,
-      };
+      throw boom.badRequest('Price cannot be empty.');
     }
     const newProduct = {
       id: faker.datatype.uuid(),
@@ -49,42 +50,30 @@ class ProductsService {
     return newProduct;
   }
 
-  async update(id, body){
-    if(!id){
-      throw {
-        message: "There's no id",
-        status: 404,
-        internal: null,
-      }
+  async update(id, body) {
+    let index = this.products.findIndex((product) => product.id == id);
+    if (index === -1) {
+      throw boom.notFound("There's no product to update");
     }
-    if(Object.entries(body).length === 0){
-      throw {
-        message: "There's no fields to update",
-        status: 404,
-        internal: null,
-      }
+    if (Object.entries(body).length === 0) {
+      throw boom.badRequest("There's no fields to update");
     }
-    let index = this.products.findIndex(product => product.id == id);
     let product = this.products[index];
     this.products[index] = {
       ...product,
-      ...body
-    }
+      ...body,
+    };
     return this.products[index];
   }
 
-  async delete(id){
-    if(!id){
-      throw {
-        message: "There's no id",
-        status: 404,
-        internal: null,
-      }
+  async delete(id) {
+    let index = this.products.findIndex((product) => product.id == id);
+    if (index === -1) {
+      throw boom.notFound("Product with id '" + id + "' doesn't exist");
     }
-    let index = this.products.findIndex(product => product.id == id);
     let productEliminated = this.products[index];
-    if(index > -1){
-      this.products.splice(index,1);
+    if (index > -1) {
+      this.products.splice(index, 1);
     }
     return productEliminated;
   }
