@@ -7,7 +7,7 @@ const {
   logError,
   errorHandler,
   boomErrorHandler,
-} = require('./middlewares/errorHandler'); //? Error handle middleware
+} = require('./middlewares/error.handler'); //? Error handle middleware
 
 const cors = require('cors');
 // const whitelist = ['http://127.0.0.1:5500/'];
