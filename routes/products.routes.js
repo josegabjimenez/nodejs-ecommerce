@@ -5,6 +5,7 @@ const response = require('./response');
 
 // Products service
 const service = new ProductsService();
+
 // Validator
 const validator = require('../middlewares/validator.handler');
 const {
@@ -12,16 +13,26 @@ const {
   updateProductSchema,
   getProductSchema,
   deleteProductSchema,
-} = require('../schemas/products.schema');
+} = require('../schemas/products.schema'); // Schemas
+
+router.get('/', async (req, res, next) => {
+  const query = req.query;
+  try {
+    const products = await service.find(query);
+    response.success(req, res, 'Products were retrieved.', 200, products);
+  } catch (err) {
+    next(err);
+  }
+});
 
 router.get(
-  '/',
-  validator(getProductSchema, 'query'),
+  '/:id',
+  validator(getProductSchema, 'params'),
   async (req, res, next) => {
-    const query = req.query;
+    const { id } = req.params;
     try {
-      const products = await service.find(query);
-      response.success(req, res, 'Products were retrieved.', 200, products);
+      const product = await service.find({ id });
+      response.success(req, res, 'Product was retrieved.', 200, product);
     } catch (err) {
       next(err);
     }

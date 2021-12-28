@@ -28,6 +28,7 @@
   "dependencies": {
     "@hapi/boom": "^9.1.4",
     "chalk": "^4.1.2",
+    "cors": "^2.8.5",
     "express": "^4.17.1",
     "joi": "^17.5.0"
   }
