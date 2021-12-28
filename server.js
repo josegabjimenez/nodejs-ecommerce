@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const PORT = 3001; //? PORT
+const PORT = process.env.PORT || 3001; //? PORT
 const routerApi = require('./routes'); //? Router
 
 const {
