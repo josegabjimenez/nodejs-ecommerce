@@ -1,5 +1,8 @@
+const chalk = require('chalk');
+
 const logError = (err, req, res, next) => {
-  if (err.output.statusCode === 500) console.error(err.message);
+  if (err.output.statusCode === 500)
+    console.error(chalk.bold.red('[Internal Error]:'), chalk.red(err.message));
   next(err);
 };
 

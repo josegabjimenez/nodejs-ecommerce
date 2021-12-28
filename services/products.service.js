@@ -34,12 +34,6 @@ class ProductsService {
   }
 
   async create({ productName, productDescription, price }) {
-    if (!productName) {
-      throw boom.badRequest('Product name cannot be empty.');
-    }
-    if (!price) {
-      throw boom.badRequest('Price cannot be empty.');
-    }
     const newProduct = {
       id: faker.datatype.uuid(),
       productName,
