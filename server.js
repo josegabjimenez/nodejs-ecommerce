@@ -1,6 +1,7 @@
+const { config } = require('./config');
 const express = require('express');
 const app = express();
-const PORT = process.env.PORT || 3001; //? PORT
+const PORT = config.port; //? PORT
 const routerApi = require('./routes'); //? Router
 
 const {
@@ -38,5 +39,5 @@ app.use(errorHandler); // Error handler
 
 // Listen
 app.listen(PORT, () => {
-  console.log('Server running on: http://localhost:3001');
+  console.log(`Server running on: http://localhost:${PORT}`);
 });
