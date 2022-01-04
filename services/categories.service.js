@@ -7,9 +7,13 @@ class CategoriesService {
   }
 
   async find() {
-    const query = 'SELECT * FROM tasks';
-    const res = await this.client.query(query);
-    return res.rows;
+    try {
+      const query = 'SELECT * FROM tasks';
+      const res = await this.client.query(query);
+      return res.rows;
+    } catch (err) {
+      console.error(err);
+    }
   }
 
   async findOne(id) {

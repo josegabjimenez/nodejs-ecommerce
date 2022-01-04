@@ -1,13 +1,13 @@
-require('dotenv').config();
+const { config } = require('../config');
 const { Client } = require('pg');
 
 const connection = async () => {
   const client = new Client({
-    host: process.env.HOST,
+    host: config.dbHost,
     port: 5432,
-    user: process.env.POSTGRES_USER,
-    password: process.env.POSTGRES_PASSWORD,
-    database: process.env.POSTGRES_DB,
+    user: config.dbUser,
+    password: config.dbPassword,
+    database: config.dbName,
   });
 
   await client.connect();
