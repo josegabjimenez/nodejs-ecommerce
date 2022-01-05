@@ -5,9 +5,10 @@ const PORT = config.port; //? PORT
 const routerApi = require('./routes'); //? Router
 
 const {
-  logError,
+  logInternalError,
   errorHandler,
   boomErrorHandler,
+  sequelizeErrorHandler,
 } = require('./middlewares/error.handler'); //? Error handle middleware
 
 const cors = require('cors');
@@ -33,8 +34,9 @@ app.get('/', (req, res) => {
 
 // Router
 routerApi(app);
-app.use(logError); // Log errors
+app.use(logInternalError); // Log errors
 app.use(boomErrorHandler); // Boom error handler
+app.use(sequelizeErrorHandler); // Sequelize error handler
 app.use(errorHandler); // Error handler
 
 // Listen

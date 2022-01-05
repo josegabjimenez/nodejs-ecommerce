@@ -1,34 +1,53 @@
 const boom = require('@hapi/boom');
-// const connection = require('../libs/postgres');
-const sequelize = require('../libs/sequelize');
+const { User } = require('../db/models');
 
 class UsersService {
   constructor() {}
 
   async find() {
-    // const client = await connection();
-    const query = 'SELECT * FROM tasks';
-    const [data] = await sequelize.query(query);
-    return data;
+    const users = await User.findAll();
+    return users;
   }
 
-  findOne() {
-    return {};
+  async findOne(id) {
+    try {
+      const user = await User.findByPk(id);
+      if (!user) {
+        throw boom.notFound('User not found');
+      }
+      return user;
+    } catch (err) {
+      throw err;
+    }
   }
 
-  create(data) {
-    return { id: 1, ...data };
+  async create(data) {
+    try {
+      const newUser = await User.create(data);
+      return newUser;
+    } catch (err) {
+      throw err;
+    }
   }
 
   async update(id, data) {
-    if (id == 1) {
-      throw boom.conflict('The id 1 is not available in the database.');
+    try {
+      const user = await this.findOne(id);
+      await user.update(data);
+      return user;
+    } catch (err) {
+      throw err;
     }
-    return { id, ...data };
   }
 
-  delete(id) {
-    return { id };
+  async delete(id) {
+    try {
+      const user = await this.findOne(id);
+      await user.destroy();
+      return user;
+    } catch (err) {
+      throw err;
+    }
   }
 }
 

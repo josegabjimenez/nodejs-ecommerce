@@ -1,5 +1,6 @@
 const faker = require('faker');
 const boom = require('@hapi/boom');
+const { Product } = require('../db/models');
 
 class ProductsService {
   constructor() {
@@ -20,17 +21,24 @@ class ProductsService {
   }
 
   async find(query) {
-    if (query.id) {
-      let product = this.products.find((product) => product.id === query.id);
-      if (!product) {
-        throw boom.notFound('Product not found');
-      }
-      if (product.isBlocked) {
-        throw boom.unauthorized('The product is blocked');
-      }
-      return product;
+    // if (query.id) {
+    //   let product = this.products.find((product) => product.id === query.id);
+    //   if (!product) {
+    //     throw boom.notFound('Product not found');
+    //   }
+    //   if (product.isBlocked) {
+    //     throw boom.unauthorized('The product is blocked');
+    //   }
+    //   return product;
+    // }
+    // return this.products;
+
+    try {
+      const products = await Product.findAll();
+      return products;
+    } catch (err) {
+      console.error(err.message);
     }
-    return this.products;
   }
 
   async create({ productName, productDescription, price }) {
