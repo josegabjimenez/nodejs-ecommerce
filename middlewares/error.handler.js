@@ -19,16 +19,16 @@ const boomErrorHandler = (err, req, res, next) => {
 const sequelizeErrorHandler = (err, req, res, next) => {
   if (err.parent) {
     const { fields, parent } = err;
-    res.status(500).json({
-      fields,
+    res.status(409).json({
       error: parent.detail,
+      fields,
     });
   } else {
     next(err);
   }
 };
 
-const errorHandler = (err, req, res, next) => {
+const errorHandler = (err, req, res) => {
   res.json({
     message: 'Something failed',
     err,

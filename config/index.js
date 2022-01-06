@@ -7,6 +7,10 @@ const config = {
   dbPassword: process.env.POSTGRES_PASSWORD,
   dbName: process.env.POSTGRES_DB,
   dbPort: process.env.POSTGRES_PORT,
+  dbMySqlUser: process.env.MYSQL_USER,
+  dbMySqlPassword: process.env.MYSQL_PASSWORD,
+  dbMySqlName: process.env.MYSQL_DB,
+  dbMySqlPort: process.env.MYSQL_PORT,
 };
 
 module.exports = {
