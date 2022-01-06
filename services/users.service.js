@@ -10,44 +10,27 @@ class UsersService {
   }
 
   async findOne(id) {
-    try {
-      const user = await User.findByPk(id);
-      if (!user) {
-        throw boom.notFound('User not found');
-      }
-      return user;
-    } catch (err) {
-      throw err;
+    const user = await User.findByPk(id);
+    if (!user) {
+      throw boom.notFound('User not found');
     }
+    return user;
   }
 
   async create(data) {
-    try {
-      const newUser = await User.create(data);
-      return newUser;
-    } catch (err) {
-      throw err;
-    }
+    const newUser = await User.create(data);
+    return newUser;
   }
 
   async update(id, data) {
-    try {
-      const user = await this.findOne(id);
-      await user.update(data);
-      return user;
-    } catch (err) {
-      throw err;
-    }
+    const user = await this.findOne(id);
+    await user.update(data);
   }
 
   async delete(id) {
-    try {
-      const user = await this.findOne(id);
-      await user.destroy();
-      return user;
-    } catch (err) {
-      throw err;
-    }
+    const user = await this.findOne(id);
+    await user.destroy();
+    return user;
   }
 }
 
