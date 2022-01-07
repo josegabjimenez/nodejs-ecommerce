@@ -28,7 +28,7 @@ const sequelizeErrorHandler = (err, req, res, next) => {
   }
 };
 
-const errorHandler = (err, req, res) => {
+const errorHandler = (err, req, res, next) => {
   res.json({
     message: 'Something failed',
     err,
