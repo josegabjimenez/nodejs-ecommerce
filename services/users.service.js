@@ -5,7 +5,9 @@ class UsersService {
   constructor() {}
 
   async find() {
-    const users = await User.findAll();
+    const users = await User.findAll({
+      include: ['customer'],
+    });
     return users;
   }
 

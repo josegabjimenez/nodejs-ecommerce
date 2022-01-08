@@ -5,7 +5,9 @@ class CustomersService {
   constructor() {}
 
   async find() {
-    const customers = await Customer.findAll();
+    const customers = await Customer.findAll({
+      include: ['user'],
+    });
     return customers;
   }
 
@@ -18,7 +20,9 @@ class CustomersService {
   }
 
   async create(data) {
-    const newCustomer = await Customer.create(data);
+    const newCustomer = await Customer.create(data, {
+      include: ['user'],
+    });
     return newCustomer;
   }
 
