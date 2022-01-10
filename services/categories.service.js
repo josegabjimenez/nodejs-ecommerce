@@ -1,31 +1,38 @@
-const pool = require('../libs/postgres.pool');
+const boom = require('@hapi/boom');
+const { Category } = require('../db/models');
 
 class CategoriesService {
-  constructor() {
-    this.client = pool;
-    this.client.on('error', (err) => console.error(err));
-  }
+  constructor() {}
 
   async find() {
-    try {
-      const query = 'SELECT * FROM tasks';
-      const res = await this.client.query(query);
-      return res.rows;
-    } catch (err) {
-      console.error(err);
-    }
+    const categories = await Category.findAll();
+    return categories;
   }
 
   async findOne(id) {
-    return { id };
+    const categories = await Category.findByPk(id, {
+      include: ['products'],
+    });
+    if (!categories) {
+      throw boom.notFound('Category not found');
+    }
+    return categories;
   }
 
   async create(data) {
-    return { id: 1, ...data };
+    const newCategory = await Category.create(data);
+    return newCategory;
+  }
+
+  async update(id, data) {
+    const category = await this.findOne(id);
+    await category.update(data);
   }
 
   async delete(id) {
-    return { id };
+    const category = await this.findOne(id);
+    await category.destroy();
+    return category;
   }
 }
 

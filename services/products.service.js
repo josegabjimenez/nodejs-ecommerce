@@ -1,83 +1,46 @@
-const faker = require('faker');
 const boom = require('@hapi/boom');
-const { Product } = require('../db/models');
+const { Product, Category } = require('../db/models');
 
 class ProductsService {
-  constructor() {
-    this.products = [];
-    this.generate();
+  constructor() {}
+
+  async find() {
+    const products = await Product.findAll({
+      include: ['category'],
+    });
+    return products;
   }
 
-  generate() {
-    for (let i = 0; i < 5; i++) {
-      this.products.push({
-        id: faker.datatype.uuid(),
-        productName: faker.commerce.productName(),
-        productDescription: faker.commerce.productDescription(),
-        price: faker.commerce.price(),
-        isBlocked: faker.datatype.boolean(),
-      });
+  async findOne(id) {
+    const product = await Product.findByPk(id, {
+      include: ['category'],
+    });
+    if (!product) {
+      throw boom.notFound('Product not found');
     }
+    return product;
   }
 
-  async find(query) {
-    // if (query.id) {
-    //   let product = this.products.find((product) => product.id === query.id);
-    //   if (!product) {
-    //     throw boom.notFound('Product not found');
-    //   }
-    //   if (product.isBlocked) {
-    //     throw boom.unauthorized('The product is blocked');
-    //   }
-    //   return product;
-    // }
-    // return this.products;
-
-    try {
-      const products = await Product.findAll();
-      return products;
-    } catch (err) {
-      console.error(err.message);
+  async create(data) {
+    const category = await Category.findByPk(data.categoryId);
+    if (!category) {
+      throw boom.badRequest(
+        `The category id "${data.categoryId}" does not exist.`
+      );
     }
-  }
-
-  async create({ productName, productDescription, price }) {
-    const newProduct = {
-      id: faker.datatype.uuid(),
-      productName,
-      productDescription,
-      price,
-    };
-    this.products.push(newProduct);
+    const newProduct = await Product.create(data);
     return newProduct;
   }
 
-  async update(id, body) {
-    let index = this.products.findIndex((product) => product.id == id);
-    if (index === -1) {
-      throw boom.notFound("There's no product to update");
-    }
-    if (Object.entries(body).length === 0) {
-      throw boom.badRequest("There's no fields to update");
-    }
-    let product = this.products[index];
-    this.products[index] = {
-      ...product,
-      ...body,
-    };
-    return this.products[index];
+  async update(id, data) {
+    const product = await this.findOne(id);
+    await product.update(data);
   }
 
   async delete(id) {
-    let index = this.products.findIndex((product) => product.id == id);
-    if (index === -1) {
-      throw boom.notFound("Product with id '" + id + "' doesn't exist");
-    }
-    let productEliminated = this.products[index];
-    if (index > -1) {
-      this.products.splice(index, 1);
-    }
-    return productEliminated;
+    const product = await this.findOne(id);
+    await product.destroy();
+    return product;
   }
 }
 

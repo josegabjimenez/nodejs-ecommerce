@@ -12,7 +12,6 @@ const {
   createProductSchema,
   updateProductSchema,
   getProductSchema,
-  deleteProductSchema,
 } = require('../schemas/products.schema'); // Schemas
 
 router.get('/', async (req, res, next) => {
@@ -26,12 +25,12 @@ router.get('/', async (req, res, next) => {
 });
 
 router.get(
-  '/:id',
+  '/:productId',
   validator(getProductSchema, 'params'),
   async (req, res, next) => {
-    const { id } = req.params;
+    const { productId } = req.params;
     try {
-      const product = await service.find({ id });
+      const product = await service.findOne(productId);
       response.success(req, res, 'Product was retrieved.', 200, product);
     } catch (err) {
       next(err);
@@ -54,14 +53,14 @@ router.post(
 );
 
 router.patch(
-  '/:id',
+  '/:productId',
   validator(getProductSchema, 'params'),
   validator(updateProductSchema, 'body'),
   async (req, res, next) => {
-    const { id } = req.params;
+    const { productId } = req.params;
     const body = req.body;
     try {
-      const updatedProduct = await service.update(id, body);
+      const updatedProduct = await service.update(productId, body);
       response.success(req, res, 'Product was updated', 200, updatedProduct);
     } catch (err) {
       next(err);
@@ -70,12 +69,12 @@ router.patch(
 );
 
 router.delete(
-  '/:id',
-  validator(deleteProductSchema, 'params'),
+  '/:productId',
+  validator(getProductSchema, 'params'),
   async (req, res, next) => {
-    const { id } = req.params;
+    const { productId } = req.params;
     try {
-      const eliminatedProduct = await service.delete(id);
+      const eliminatedProduct = await service.delete(productId);
       response.success(
         req,
         res,

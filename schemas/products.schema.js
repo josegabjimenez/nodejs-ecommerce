@@ -1,33 +1,34 @@
 const Joi = require('joi');
 
-const id = Joi.string().uuid();
-const productName = Joi.string().min(3).max(30);
-const productDescription = Joi.string().min(10).max(150);
+const productId = Joi.number().integer();
+const name = Joi.string().min(3).max(30);
+const description = Joi.string().min(10).max(150);
 const price = Joi.number().min(0).strict();
+const image = Joi.string().uri();
+const categoryId = Joi.number().integer().min(0);
 
 const createProductSchema = Joi.object({
-  productName: productName.required(),
-  productDescription,
+  name: name.required(),
+  description: description.required(),
   price: price.required(),
+  image: image.required(),
+  categoryId: categoryId.required(),
 });
 
 const updateProductSchema = Joi.object({
-  productName,
-  productDescription,
+  name,
+  description,
   price,
+  image,
+  categoryId,
 });
 
 const getProductSchema = Joi.object({
-  id: id.required(),
-});
-
-const deleteProductSchema = Joi.object({
-  id: id.required(),
+  productId: productId.required(),
 });
 
 module.exports = {
   createProductSchema,
   updateProductSchema,
   getProductSchema,
-  deleteProductSchema,
 };

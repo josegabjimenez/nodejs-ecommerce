@@ -49,6 +49,28 @@ router.post(
   }
 );
 
+router.patch(
+  '/:categoryId',
+  validator(getCategorySchema, 'params'),
+  validator(updateCategorySchema, 'body'),
+  async (req, res, next) => {
+    const { categoryId } = req.params;
+    const data = req.body;
+    try {
+      const updatedCategory = await service.update(categoryId, data);
+      response.success(
+        req,
+        res,
+        'Category updated successfully.',
+        200,
+        updatedCategory
+      );
+    } catch (err) {
+      next(err);
+    }
+  }
+);
+
 router.delete(
   '/:categoryId',
   validator(getCategorySchema, 'params'),
