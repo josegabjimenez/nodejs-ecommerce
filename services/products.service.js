@@ -35,6 +35,7 @@ class ProductsService {
   async update(id, data) {
     const product = await this.findOne(id);
     await product.update(data);
+    return product;
   }
 
   async delete(id) {

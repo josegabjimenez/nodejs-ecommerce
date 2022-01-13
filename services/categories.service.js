@@ -27,6 +27,7 @@ class CategoriesService {
   async update(id, data) {
     const category = await this.findOne(id);
     await category.update(data);
+    return category;
   }
 
   async delete(id) {

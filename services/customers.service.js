@@ -29,6 +29,7 @@ class CustomersService {
   async update(id, data) {
     const customer = await this.findOne(id);
     await customer.update(data);
+    return customer;
   }
 
   async delete(id) {
