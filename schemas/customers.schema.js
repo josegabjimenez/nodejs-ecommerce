@@ -3,7 +3,7 @@ const Joi = require('joi');
 const customerId = Joi.number().integer();
 const name = Joi.string().min(3);
 const lastName = Joi.string().min(3);
-const phone = Joi.string().min(6).max(10);
+const phone = Joi.number().integer();
 const userId = Joi.number().integer();
 const { createUserSchema, updateUserSchema } = require('./users.schema');
 
