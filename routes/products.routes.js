@@ -12,17 +12,22 @@ const {
   createProductSchema,
   updateProductSchema,
   getProductSchema,
+  queryProductSchema,
 } = require('../schemas/products.schema'); // Schemas
 
-router.get('/', async (req, res, next) => {
-  const query = req.query;
-  try {
-    const products = await service.find(query);
-    response.success(req, res, 'Products were retrieved.', 200, products);
-  } catch (err) {
-    next(err);
+router.get(
+  '/',
+  validator(queryProductSchema, 'query'),
+  async (req, res, next) => {
+    const query = req.query;
+    try {
+      const products = await service.find(query);
+      response.success(req, res, 'Products were retrieved.', 200, products);
+    } catch (err) {
+      next(err);
+    }
   }
-});
+);
 
 router.get(
   '/:productId',

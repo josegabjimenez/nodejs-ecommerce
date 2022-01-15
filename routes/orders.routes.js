@@ -7,6 +7,7 @@ const {
   createOrderSchema,
   updateOrderSchema,
   getOrderSchema,
+  addItemSchema,
 } = require('../schemas/orders.schema');
 
 // Service
@@ -43,6 +44,20 @@ router.post(
     try {
       const newOrder = await service.create(data);
       response.success(req, res, 'Order was created', 201, newOrder);
+    } catch (err) {
+      next(err);
+    }
+  }
+);
+
+router.post(
+  '/add-item',
+  validator(addItemSchema, 'body'),
+  async (req, res, next) => {
+    const data = req.body;
+    try {
+      const newItem = await service.addItem(data);
+      response.success(req, res, 'Item was successfully added', 201, newItem);
     } catch (err) {
       next(err);
     }

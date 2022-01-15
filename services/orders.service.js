@@ -1,5 +1,5 @@
 const boom = require('@hapi/boom');
-const { Order, Customer } = require('../db/models');
+const { Order, Customer, OrderProduct, Product } = require('../db/models');
 
 class OrdersService {
   constructor() {}
@@ -13,10 +13,13 @@ class OrdersService {
 
   async findOne(id) {
     const order = await Order.findByPk(id, {
-      include: {
-        association: 'customer',
-        include: ['user'],
-      },
+      include: [
+        {
+          association: 'customer',
+          include: ['user'],
+        },
+        'items',
+      ],
     });
     if (!order) {
       throw boom.notFound('Order not found');
@@ -36,6 +39,15 @@ class OrdersService {
       },
     });
     return newOrder;
+  }
+
+  async addItem(data) {
+    const order = await Order.findByPk(data.orderId);
+    const product = await Product.findByPk(data.productId);
+    if (!order) throw boom.notFound('Order not found');
+    if (!product) throw boom.notFound('Product not found');
+    const newItem = await OrderProduct.create(data);
+    return newItem;
   }
 
   async update(id, data) {
