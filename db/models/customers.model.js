@@ -1,5 +1,6 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../../libs/sequelize');
+const bcrypt = require('bcrypt');
 
 const { USER_TABLE, User } = require('./users.model'); //* Relation 1-1
 
@@ -50,6 +51,12 @@ const CustomerSchema = {
 // Model
 const Customer = sequelize.define(CUSTOMER_TABLE, CustomerSchema, {
   timestamps: false,
+  hooks: {
+    beforeCreate: async (customer) => {
+      const hash = await bcrypt.hash(customer.user.password, 10);
+      customer.user.password = hash;
+    },
+  },
 });
 
 // Relation 1-1 with User model

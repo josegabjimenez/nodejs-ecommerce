@@ -21,6 +21,7 @@ class UsersService {
 
   async create(data) {
     const newUser = await User.create(data);
+    delete newUser.dataValues.password;
     return newUser;
   }
 

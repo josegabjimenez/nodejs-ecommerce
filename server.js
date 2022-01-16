@@ -11,6 +11,8 @@ const {
   sequelizeErrorHandler,
 } = require('./middlewares/error.handler'); //? Error handle middleware
 
+const { authApiKey } = require('./middlewares/auth.handler');
+
 const cors = require('cors');
 // const whitelist = ['http://127.0.0.1:5500/'];
 // const options = {
@@ -28,7 +30,7 @@ app.use(express.json()); // Parse data into JSON
 app.use(cors()); // Allow Cross-Origin
 
 // Initial route
-app.get('/', (req, res) => {
+app.get('/', authApiKey, (req, res) => {
   res.send('Hello world!');
 });
 

@@ -1,5 +1,6 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../../libs/sequelize');
+const bcrypt = require('bcrypt');
 
 const USER_TABLE = 'users';
 
@@ -39,6 +40,12 @@ const UserSchema = {
 
 const User = sequelize.define(USER_TABLE, UserSchema, {
   timestamps: false,
+  hooks: {
+    beforeCreate: async (user) => {
+      const hash = await bcrypt.hash(user.password, 10);
+      user.password = hash;
+    },
+  },
 });
 
 module.exports = { USER_TABLE, UserSchema, User };
