@@ -28,6 +28,7 @@ const cors = require('cors');
 // Middleware5500
 app.use(express.json()); // Parse data into JSON
 app.use(cors()); // Allow Cross-Origin
+require('./utils/auth');
 
 // Initial route
 app.get('/', authApiKey, (req, res) => {
