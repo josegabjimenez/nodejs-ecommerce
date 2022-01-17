@@ -14,6 +14,7 @@ const config = {
   dbMySqlName: process.env.MYSQL_DB,
   dbMySqlPort: process.env.MYSQL_PORT,
   dbUrl: process.env.DATABASE_URL,
+  jwtSecret: process.env.JWT_SECRET,
 };
 
 module.exports = {
