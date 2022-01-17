@@ -7,7 +7,7 @@ const generatePassword = async () => {
   console.log(hashedPassword);
 };
 
-// generatePassword();
+generatePassword();
 
 const verifyPassword = async () => {
   const hash = '$2b$10$pjETQCorLGApcWWFv81iOOr2og4owtphmcprkj2tGioK8j.btVWPO';
