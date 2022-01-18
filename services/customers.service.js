@@ -1,5 +1,5 @@
 const boom = require('@hapi/boom');
-const { Customer } = require('../db/models');
+const { Customer, User, Order, OrderProduct } = require('../db/models');
 
 class CustomersService {
   constructor() {}
@@ -35,7 +35,17 @@ class CustomersService {
 
   async delete(id) {
     const customer = await this.findOne(id);
+    const user = await User.findOne({
+      where: { id: customer.userId },
+    });
+    await OrderProduct.destroy({
+      where: { '$order.customer.id$': id },
+    });
+    await Order.destroy({
+      where: { '$customer.id$': id },
+    });
     await customer.destroy();
+    await user.destroy();
     return customer;
   }
 }

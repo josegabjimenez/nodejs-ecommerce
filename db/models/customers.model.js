@@ -51,12 +51,12 @@ const CustomerSchema = {
 // Model
 const Customer = sequelize.define(CUSTOMER_TABLE, CustomerSchema, {
   timestamps: false,
-  hooks: {
-    beforeCreate: async (customer) => {
-      const hash = await bcrypt.hash(customer.user.password, 10);
-      customer.user.password = hash;
-    },
-  },
+  // hooks: {
+  //   beforeCreate: async (customer) => {
+  //     const hash = await bcrypt.hash(customer.user.password, 10);
+  //     customer.user.password = hash;
+  //   },
+  // },
 });
 
 // Relation 1-1 with User model

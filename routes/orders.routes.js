@@ -40,9 +40,11 @@ router.post(
   '/',
   validator(createOrderSchema, 'body'),
   async (req, res, next) => {
+    const user = req.user;
     const data = req.body;
     try {
-      const newOrder = await service.create(data);
+      const finalData = { userId: user.sub, ...data };
+      const newOrder = await service.create(finalData);
       response.success(req, res, 'Order was created', 201, newOrder);
     } catch (err) {
       next(err);
@@ -79,6 +81,26 @@ router.patch(
         'Order updated successfully.',
         200,
         updatedOrder
+      );
+    } catch (err) {
+      next(err);
+    }
+  }
+);
+
+router.delete(
+  '/:orderId',
+  validator(getOrderSchema, 'params'),
+  async (req, res, next) => {
+    const { orderId } = req.params;
+    try {
+      const deletedOrder = await service.delete(orderId);
+      response.success(
+        req,
+        res,
+        'Order deleted successfully.',
+        200,
+        deletedOrder
       );
     } catch (err) {
       next(err);

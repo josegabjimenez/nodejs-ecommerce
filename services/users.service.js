@@ -12,10 +12,13 @@ class UsersService {
   }
 
   async findOne(id) {
-    const user = await User.findByPk(id);
+    const user = await User.findByPk(id, {
+      include: ['customer'],
+    });
     if (!user) {
       throw boom.notFound('User not found');
     }
+    delete user.dataValues.password;
     return user;
   }
 

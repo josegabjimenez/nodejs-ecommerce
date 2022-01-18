@@ -3,6 +3,9 @@ const express = require('express');
 const router = express.Router();
 const response = require('./response');
 const CustomersService = require('../services/customers.service');
+
+// Middleware
+const { checkRoles } = require('../middlewares/auth.handler');
 const validator = require('../middlewares/validator.handler');
 const {
   createCustomerSchema,
@@ -15,7 +18,7 @@ const service = new CustomersService();
 
 // Validator
 
-router.get('/', async (req, res, next) => {
+router.get('/', checkRoles('admin'), async (req, res, next) => {
   const query = req.query;
   try {
     const customers = await service.find(query);
@@ -41,6 +44,7 @@ router.get(
 
 router.post(
   '/',
+  checkRoles('admin'),
   validator(createCustomerSchema, 'body'),
   async (req, res, next) => {
     const data = req.body;

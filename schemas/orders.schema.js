@@ -1,14 +1,14 @@
 const Joi = require('joi');
 
 const orderId = Joi.number().integer().min(0);
-const customerId = Joi.number().integer().min(0);
+// const customerId = Joi.number().integer().min(0);
 const paid = Joi.boolean();
 const delivered = Joi.boolean();
 const productId = Joi.number().integer().min(0);
 const amount = Joi.number().integer().min(1);
 
 const createOrderSchema = Joi.object({
-  customerId: customerId.required(),
+  // customerId: customerId.required(),
   paid,
   delivered,
 });

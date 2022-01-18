@@ -3,6 +3,9 @@ const express = require('express');
 const router = express.Router();
 const response = require('./response');
 const UsersService = require('../services/users.service');
+
+// Middleware
+const { checkRoles } = require('../middlewares/auth.handler');
 const validator = require('../middlewares/validator.handler');
 const {
   createUserSchema,
@@ -15,7 +18,7 @@ const service = new UsersService();
 
 // Validator
 
-router.get('/', async (req, res, next) => {
+router.get('/', checkRoles('admin'), async (req, res, next) => {
   const query = req.query;
   try {
     const users = await service.find(query);

@@ -11,6 +11,17 @@ class OrdersService {
     return orders;
   }
 
+  async findByUser(userId) {
+    const orders = await Order.findAll({
+      where: { '$customer.user.id$': userId },
+      include: {
+        association: 'customer',
+        include: ['user'],
+      },
+    });
+    return orders;
+  }
+
   async findOne(id) {
     const order = await Order.findByPk(id, {
       include: [
@@ -28,11 +39,18 @@ class OrdersService {
   }
 
   async create(data) {
-    const customer = await Customer.findByPk(data.customerId);
-    if (!customer) {
-      throw boom.notFound(`Customer id "${data.customerId}" not found`);
-    }
-    const newOrder = await Order.create(data, {
+    const customer = await Customer.findOne({
+      where: { userId: data.userId },
+    });
+
+    if (!customer) throw boom.notFound(`This account does not have a customer`);
+
+    const finalData = {
+      customerId: customer.id,
+      ...data,
+    };
+
+    const newOrder = await Order.create(finalData, {
       include: {
         association: 'customer',
         include: ['user'],
@@ -53,6 +71,12 @@ class OrdersService {
   async update(id, data) {
     const order = await this.findOne(id);
     await order.update(data);
+    return order;
+  }
+
+  async delete(id) {
+    const order = await this.findOne(id);
+    await order.destroy();
     return order;
   }
 }
