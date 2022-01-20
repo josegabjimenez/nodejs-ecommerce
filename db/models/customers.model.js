@@ -1,6 +1,6 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../../libs/sequelize');
-const bcrypt = require('bcrypt');
+// const bcrypt = require('bcrypt');
 
 const { USER_TABLE, User } = require('./users.model'); //* Relation 1-1
 

@@ -10,15 +10,15 @@ async function sendEmail() {
     port: 465,
     secure: true, // true for 465, false for other ports
     auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASSWORD,
+      user: process.env.SMTP_EMAIL,
+      pass: process.env.SMTP_PASSWORD,
     },
   });
 
   // send mail with defined transport object
   let info = await transporter.sendMail({
-    from: `"Jose Gabo 👻" <${process.env.EMAIL_USER}>`, // sender address
-    to: `${process.env.EMAIL_USER}`, // list of receivers
+    from: `"Jose Gabo 👻" <${process.env.SMTP_EMAIL}>`, // sender address
+    to: `${process.env.SMTP_EMAIL}`, // list of receivers
     subject: 'Hello ✔', // Subject line
     text: 'Hello world?', // plain text body
     html: '<h1><b>This is kinda crazy</b></h1>', // html body
