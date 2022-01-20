@@ -14,11 +14,7 @@ const routerApi = (app) => {
   router.use('/products', products);
   router.use('/users', passport.authenticate('jwt', { session: false }), users);
   router.use('/categories', categories);
-  router.use(
-    '/customers',
-    passport.authenticate('jwt', { session: false }),
-    customers
-  );
+  router.use('/customers', customers);
   router.use(
     '/orders',
     passport.authenticate('jwt', { session: false }),

@@ -2,6 +2,9 @@ const express = require('express');
 const router = express.Router();
 const response = require('./response');
 const OrdersService = require('../services/orders.service');
+
+// Middleware
+const { checkRoles } = require('../middlewares/auth.handler');
 const validator = require('../middlewares/validator.handler');
 const {
   createOrderSchema,
@@ -13,7 +16,7 @@ const {
 // Service
 const service = new OrdersService();
 
-router.get('/', async (req, res, next) => {
+router.get('/', checkRoles('admin'), async (req, res, next) => {
   try {
     const orders = await service.find();
     response.success(req, res, 'Orders successfully retrieved', 200, orders);
@@ -24,6 +27,7 @@ router.get('/', async (req, res, next) => {
 
 router.get(
   '/:orderId',
+  checkRoles('admin'),
   validator(getOrderSchema, 'params'),
   async (req, res, next) => {
     const { orderId } = req.params;
@@ -68,6 +72,7 @@ router.post(
 
 router.patch(
   '/:orderId',
+  checkRoles('admin'),
   validator(getOrderSchema, 'params'),
   validator(updateOrderSchema, 'body'),
   async (req, res, next) => {
@@ -90,6 +95,7 @@ router.patch(
 
 router.delete(
   '/:orderId',
+  checkRoles('admin'),
   validator(getOrderSchema, 'params'),
   async (req, res, next) => {
     const { orderId } = req.params;

@@ -2,6 +2,7 @@
 const express = require('express');
 const router = express.Router();
 const response = require('./response');
+const passport = require('passport');
 const CustomersService = require('../services/customers.service');
 
 // Middleware
@@ -18,18 +19,25 @@ const service = new CustomersService();
 
 // Validator
 
-router.get('/', checkRoles('admin'), async (req, res, next) => {
-  const query = req.query;
-  try {
-    const customers = await service.find(query);
-    response.success(req, res, 'Customers were retrieved.', 200, customers);
-  } catch (err) {
-    next(err);
+router.get(
+  '/',
+  passport.authenticate('jwt', { session: false }),
+  checkRoles('admin'),
+  async (req, res, next) => {
+    const query = req.query;
+    try {
+      const customers = await service.find(query);
+      response.success(req, res, 'Customers were retrieved.', 200, customers);
+    } catch (err) {
+      next(err);
+    }
   }
-});
+);
 
 router.get(
   '/:customerId',
+  passport.authenticate('jwt', { session: false }),
+  checkRoles('admin'),
   validator(getCustomerSchema, 'params'),
   async (req, res, next) => {
     const { customerId } = req.params;
@@ -44,7 +52,6 @@ router.get(
 
 router.post(
   '/',
-  checkRoles('admin'),
   validator(createCustomerSchema, 'body'),
   async (req, res, next) => {
     const data = req.body;
@@ -65,6 +72,8 @@ router.post(
 
 router.patch(
   '/:customerId',
+  passport.authenticate('jwt', { session: false }),
+  checkRoles('admin'),
   validator(getCustomerSchema, 'params'),
   validator(updateCustomerSchema, 'body'),
   async (req, res, next) => {
@@ -87,6 +96,8 @@ router.patch(
 
 router.delete(
   '/:customerId',
+  passport.authenticate('jwt', { session: false }),
+  checkRoles('admin'),
   validator(getCustomerSchema, 'params'),
   async (req, res, next) => {
     const { customerId } = req.params;

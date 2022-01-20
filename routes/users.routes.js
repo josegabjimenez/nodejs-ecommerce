@@ -30,6 +30,7 @@ router.get('/', checkRoles('admin'), async (req, res, next) => {
 
 router.get(
   '/:userId',
+  checkRoles('admin'),
   validator(getUserSchema, 'params'),
   async (req, res, next) => {
     const { userId } = req.params;
@@ -44,6 +45,7 @@ router.get(
 
 router.post(
   '/',
+  checkRoles('admin'),
   validator(createUserSchema, 'body'),
   async (req, res, next) => {
     const data = req.body;
@@ -58,6 +60,7 @@ router.post(
 
 router.patch(
   '/:userId',
+  checkRoles('admin'),
   validator(getUserSchema, 'params'),
   validator(updateUserSchema, 'body'),
   async (req, res, next) => {
@@ -80,6 +83,7 @@ router.patch(
 
 router.delete(
   '/:userId',
+  checkRoles('admin'),
   validator(getUserSchema, 'params'),
   async (req, res, next) => {
     const { userId } = req.params;
