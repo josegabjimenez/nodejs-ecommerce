@@ -63,7 +63,7 @@ class AuthService {
       }
       const hash = await bcrypt.hash(password, 10);
       await service.update(user.id, {
-        recoveryToken: 'null',
+        recoveryToken: null,
         password: hash,
       });
       return null;
